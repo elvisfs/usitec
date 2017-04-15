@@ -43,7 +43,7 @@ public class SetorBean implements Serializable {
 		SetorRN setorRN = new SetorRN();
 		try {
 			setorRN.salvar(this.setor);
-			context.addMessage(null, (new FacesMessage("Registro salvo novo com sucesso")));
+			context.addMessage(null, (new FacesMessage("Registro salvo com sucesso")));
 			this.setor = new Setor();
 		} catch (DAOException e) {
 			context.addMessage(null, (new FacesMessage(e.getMessage())));;
