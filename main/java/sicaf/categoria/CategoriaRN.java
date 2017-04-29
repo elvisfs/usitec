@@ -2,7 +2,9 @@ package sicaf.categoria;
 
 import java.util.List;
 
+import sicaf.util.DAOException;
 import sicaf.util.DAOFactory;
+import sicaf.util.RNException;
 
 public class CategoriaRN {
 	private CategoriaDAO categoriaDAO;
@@ -11,11 +13,15 @@ public class CategoriaRN {
 		this.categoriaDAO = DAOFactory.criarCategoriaDAO();
 	}
 
-	public List<Categoria> listar() {
-		return this.categoriaDAO.listar();
+	public List<Categoria> listar() throws RNException {
+		try {
+			return this.categoriaDAO.listar();
+		} catch (DAOException e) {
+			throw new RNException(e.getMessage());
+		}
 	}
 
-	public Categoria salvar(Categoria categoria) {
+	public Categoria salvar(Categoria categoria) throws RNException {
 
 		Categoria pai = categoria.getPai();
 		if (pai == null) {
@@ -25,7 +31,11 @@ public class CategoriaRN {
 
 		boolean mudouFator = pai.getFator() != categoria.getFator();
 		categoria.setFator(pai.getFator());
-		categoria = this.categoriaDAO.salvar(categoria);
+		try {
+			categoria = this.categoriaDAO.salvar(categoria);
+		} catch (DAOException e) {
+			throw new RNException(e.getMessage());
+		}
 
 		if (mudouFator) {
 			categoria = this.carregar(categoria.getCodigo());
@@ -34,26 +44,37 @@ public class CategoriaRN {
 		return categoria;
 	}
 
-	private void replicarFator(Categoria categoria, int fator) {
+	private void replicarFator(Categoria categoria, int fator) throws RNException {
 		if (categoria.getFilhos() != null) {
 			for (Categoria filho : categoria.getFilhos()) {
 				filho.setFator(fator);
-				this.categoriaDAO.salvar(filho);
+				try {
+					this.categoriaDAO.salvar(filho);
+				} catch (DAOException e) {
+					throw new RNException(e.getMessage());
+				}
 				this.replicarFator(filho, fator);
 			}
 
 		}
 	}
 
-	public void excluir(Categoria categoria){
-		this.categoriaDAO.excluir(categoria);
-		
-	}
-	
-	
-	public Categoria carregar(Integer categoria) {
+	public void excluir(Categoria categoria) throws RNException {
+		try {
+			this.categoriaDAO.excluir(categoria);
+		} catch (DAOException e) {
+			throw new RNException(e.getMessage());
+		}
 
-		return this.categoriaDAO.carregar(categoria);
+	}
+
+	public Categoria carregar(Integer categoria) throws RNException {
+
+		try {
+			return this.categoriaDAO.carregar(categoria);
+		} catch (DAOException e) {
+			throw new RNException(e.getMessage());
+		}
 
 	}
 }

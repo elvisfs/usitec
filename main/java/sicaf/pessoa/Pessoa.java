@@ -20,6 +20,10 @@ import sicaf.util.TipoPessoa;
 
 
 public class Pessoa implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@SequenceGenerator(name="pessoaGenerator",sequenceName="PESSOA_SEQ",allocationSize=10)
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator="pessoaGenerator")

@@ -20,7 +20,12 @@ public class ContextoBean {
 		if (this.usuarioLogado == null || !login.equals(this.usuarioLogado.getLogin())) {
 			if (login != null) {
 				UsuarioRN usuarioRN = new UsuarioRN();
-				this.usuarioLogado = usuarioRN.buscarPorLogin(login);
+				try {
+					this.usuarioLogado = usuarioRN.buscarPorLogin(login);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 			}
 		}

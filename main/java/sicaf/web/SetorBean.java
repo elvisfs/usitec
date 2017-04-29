@@ -11,10 +11,12 @@ import javax.faces.context.FacesContext;
 import sicaf.setor.Setor;
 import sicaf.setor.SetorRN;
 import sicaf.util.DAOException;
+import sicaf.util.RNException;
 
 @ManagedBean(name = "setorBean")
 @RequestScoped
 public class SetorBean implements Serializable {
+	
 	private Setor setor = new Setor();
 	private List<Setor> lista;
 
@@ -29,7 +31,12 @@ public class SetorBean implements Serializable {
 	public List<Setor> getLista() {
 		if (this.lista == null) {
 			SetorRN setorRN = new SetorRN();
-			this.lista = setorRN.listar();
+			try {
+				this.lista = setorRN.listar();
+			} catch (RNException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return this.lista;
 	}
@@ -51,8 +58,14 @@ public class SetorBean implements Serializable {
 	}
 
 	public void excluir() {
+		FacesContext context = FacesContext.getCurrentInstance();
 		SetorRN setorRN = new SetorRN();
-		setorRN.excluir(this.setor);
+		try {
+			setorRN.excluir(this.setor);
+		} catch (RNException e) {
+			context.addMessage(null, (new FacesMessage(e.getMessage())));
+		}
+		this.lista = null;
 	}
 	
 	public String editar() {

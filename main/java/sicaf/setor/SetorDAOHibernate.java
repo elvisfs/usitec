@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import sicaf.util.DAOException;
+import sicaf.util.HibernateUtil;
 
 public class SetorDAOHibernate implements SetorDAO {
 
@@ -20,41 +21,70 @@ public class SetorDAOHibernate implements SetorDAO {
 
 	@Override
 	public void salvar(Setor setor) throws DAOException {
-		String hql = "select s.nomeSetor from Setor s where s.nomeSetor = :nomeSetor";
-		String nomeSetor = setor.getNomeSetor();
-		Query<?> consulta = this.session.createQuery(hql);
-		consulta.setParameter("nomeSetor", nomeSetor);
-		if (consulta.getResultList().size()>0) {
-			throw new DAOException("Setor já existente");
+		try {
+			this.session = HibernateUtil.getSessionFactory().openSession();
+			this.session.beginTransaction();
+			this.session.saveOrUpdate(setor);
+			this.session.getTransaction().commit();
+		} catch (javax.persistence.PersistenceException e) {
+			throw new DAOException(e.getMessage());
+		} finally {
+			if (this.session.getTransaction().isActive())
+				this.session.getTransaction().rollback();
+			this.session.close();
 		}
-		this.session.saveOrUpdate(setor);
-
 	}
 
 	@Override
-	public void excluir(Setor setor) {
-		this.session.delete(setor);
-
+	public void excluir(Setor setor) throws DAOException {
+		try{
+			this.session = HibernateUtil.getSessionFactory().openSession();
+			this.session.beginTransaction();
+			this.session.delete(setor);
+			this.session.getTransaction().commit();
+		}catch(javax.persistence.EntityNotFoundException e){
+			throw new DAOException("Setor não cadastrado");
+		} finally{
+			if(this.session.getTransaction().isActive())
+				this.session.getTransaction().rollback();
+			this.session.close();
+		}
 	}
 
 	@Override
-	public Setor carregar(Integer codigo) {
-
-		return (Setor) this.session.get(Setor.class, codigo);
+	public Setor carregar(Integer codigo) throws DAOException {
+		try {
+			this.session = HibernateUtil.getSessionFactory().openSession();
+			return (Setor) this.session.get(Setor.class, codigo);
+		} catch (javax.persistence.EntityNotFoundException e) {
+			throw new DAOException("Setor não cadastrado");
+		} finally {
+			this.session.close();
+		}
 	}
 
 	@Override
-	public List<Setor> listar() {
+	public List<Setor> listar() throws DAOException {
+		try {
+			this.session = HibernateUtil.getSessionFactory().openSession();
+			this.session.beginTransaction();
 
-		CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaBuilder builder = session.getCriteriaBuilder();
 
-		CriteriaQuery<Setor> criteria = builder.createQuery(Setor.class);
-		criteria.from(Setor.class);
-		List<Setor> setores = session.createQuery(criteria).getResultList();
-		return setores;
+			CriteriaQuery<Setor> criteria = builder.createQuery(Setor.class);
+			criteria.from(Setor.class);
+			List<Setor> setores = session.createQuery(criteria).getResultList();
+			this.session.getTransaction().commit();
+			return setores;
+		} catch (javax.persistence.EntityNotFoundException e) {
+			throw new DAOException("Não há setores cadastrados");
+		} finally {
+			if (this.session.getTransaction().isActive())
+				this.session.getTransaction().rollback();
+			this.session.close();
+		}
 
 	}
-
 
 	@Override
 	public Setor buscarPorDescricao(String setor) {
@@ -70,18 +100,30 @@ public class SetorDAOHibernate implements SetorDAO {
 	}
 
 	@Override
-	public void atualizar(Setor setor)  throws DAOException{
-		String hql = "select s.nomeSetor from Setor s where s.nomeSetor = :nomeSetor and s.id != :idSetor";
-		String nomeSetor = setor.getNomeSetor();
-		Integer idSetor = setor.getId();
-		Query<?> consulta = this.session.createQuery(hql);
-		consulta.setParameter("nomeSetor", nomeSetor);
-		consulta.setParameter("idSetor", idSetor);
-		if (consulta.getResultList().size() >0) {
-			throw new DAOException("Setor já existente");
-		}
+	public void atualizar(Setor setor) throws DAOException {
+		try {
+			this.session = HibernateUtil.getSessionFactory().openSession();
+			this.session.beginTransaction();
 		this.session.update(setor);
-		
+		this.session.getTransaction().commit();
+		}catch (javax.persistence.PersistenceException e){
+			throw new DAOException(e.getMessage());
+		}finally{
+			if(this.session.getTransaction().isActive())
+				this.session.getTransaction().rollback();
+			this.session.close();
+		}
+
 	}
+	/*
+	String hql = "select s.nomeSetor from Setor s where s.nomeSetor = :nomeSetor and s.id != :idSetor";
+	String nomeSetor = setor.getNomeSetor();
+	Integer idSetor = setor.getId();
+	Query<?> consulta = this.session.createQuery(hql);
+	consulta.setParameter("nomeSetor", nomeSetor);
+	consulta.setParameter("idSetor", idSetor);
+	if (consulta.getResultList().size() > 0) {
+		throw new DAOException("Setor já existente");
+	}*/
 
 }

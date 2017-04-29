@@ -4,6 +4,7 @@ import java.util.List;
 
 import sicaf.util.DAOException;
 import sicaf.util.DAOFactory;
+import sicaf.util.RNException;
 
 public class SetorRN {
 	private SetorDAO setorDAO;
@@ -12,8 +13,12 @@ public class SetorRN {
 		this.setorDAO = DAOFactory.criarSetorDAO();
 	}
 
-	public Setor carregar(Integer codigo) {
-		return this.setorDAO.carregar(codigo);
+	public Setor carregar(Integer codigo) throws RNException {
+		try {
+			return this.setorDAO.carregar(codigo);
+		} catch (DAOException e) {
+			throw new RNException(e.getMessage());
+		}
 	}
 
 	public Setor buscarPorDescricao(String setor) {
@@ -28,11 +33,19 @@ public class SetorRN {
 		}
 	}
 
-	public void excluir(Setor setor) {
-		this.setorDAO.excluir(setor);
+	public void excluir(Setor setor) throws RNException {
+		try {
+			this.setorDAO.excluir(setor);
+		} catch (DAOException e) {
+			throw new RNException(e.getMessage());
+		}
 	}
 
-	public List<Setor> listar() {
-		return this.setorDAO.listar();
+	public List<Setor> listar() throws RNException {
+		try {
+			return this.setorDAO.listar();
+		} catch (DAOException e) {
+			throw new RNException(e.getMessage());
+		}
 	}
 }

@@ -7,7 +7,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
@@ -20,10 +19,6 @@ import sicaf.util.TipoPessoa;
 @ViewScoped
 public class PessoaBean implements Serializable{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private Pessoa pessoa = new Pessoa();
 	private List<Pessoa> lista;
 	private List<PessoaSetor> listaSetores;

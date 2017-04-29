@@ -9,12 +9,12 @@ public interface SetorDAO {
 
 	public void atualizar(Setor setor) throws DAOException;
 	
-	public void excluir(Setor setor);
+	public void excluir(Setor setor) throws DAOException;
 
-	public Setor carregar(Integer codigo);
+	public Setor carregar(Integer codigo) throws DAOException;
 	
 	public Setor buscarPorDescricao(String setor);
 
-	public List<Setor> listar();
+	public List<Setor> listar() throws DAOException;
 	
 }

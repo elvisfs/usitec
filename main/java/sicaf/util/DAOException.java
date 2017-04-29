@@ -1,11 +1,5 @@
 package sicaf.util;
 
-import java.sql.SQLException;
-
-import org.hibernate.exception.spi.TemplatedViolatedConstraintNameExtracter;
-import org.hibernate.exception.spi.ViolatedConstraintNameExtracter;
-import org.hibernate.internal.util.JdbcExceptionHelper;
-
 public class DAOException extends Exception {
 
 	public DAOException() {

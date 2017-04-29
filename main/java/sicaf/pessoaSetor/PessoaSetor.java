@@ -15,6 +15,11 @@ import sicaf.setor.Setor;
 @IdClass(PessoaSetorId.class)
 public class PessoaSetor implements Serializable {
 		
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@ManyToOne
 	@JoinColumn(name="pessoa_id")

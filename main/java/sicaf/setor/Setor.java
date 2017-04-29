@@ -14,6 +14,10 @@ import sicaf.pessoaSetor.PessoaSetor;
 
 @Entity
 public class Setor implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@SequenceGenerator(name="setorGenerator",sequenceName="SETOR_SEQ",allocationSize=10)
 	@GeneratedValue(generator="setorGenerator")

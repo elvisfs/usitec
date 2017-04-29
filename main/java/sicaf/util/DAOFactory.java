@@ -2,6 +2,8 @@ package sicaf.util;
 
 import sicaf.categoria.CategoriaDAO;
 import sicaf.categoria.CategoriaDAOHibernate;
+import sicaf.perfil.PerfilDAO;
+import sicaf.perfil.PerfilDAOHibernate;
 import sicaf.pessoa.PessoaDAO;
 import sicaf.pessoa.PessoaDAOHibernate;
 import sicaf.setor.SetorDAO;
@@ -29,5 +31,10 @@ public class DAOFactory {
 		PessoaDAOHibernate pessoaDAO = new PessoaDAOHibernate();
 		pessoaDAO.setSession(HibernateUtil.getSessionFactory().getCurrentSession());
 		return (PessoaDAO) pessoaDAO;
+	}
+	public static PerfilDAO criarPerfilDAO() {
+		PerfilDAOHibernate perfilDAO = new PerfilDAOHibernate();
+		perfilDAO.setSession(HibernateUtil.getSessionFactory().getCurrentSession());
+		return (PerfilDAO) perfilDAO;
 	}
 }

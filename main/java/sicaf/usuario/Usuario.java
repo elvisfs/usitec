@@ -1,10 +1,9 @@
 package sicaf.usuario;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,11 +11,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.UniqueConstraint;
+
+import sicaf.perfil.Perfil;
 
 @Entity
+
 public class Usuario implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@SequenceGenerator(name="usuarioGenerator",sequenceName="USUARIO_SEQ",allocationSize=10)
 	@GeneratedValue (strategy=GenerationType.SEQUENCE, generator="usuarioGenerator")
@@ -28,31 +34,26 @@ public class Usuario implements Serializable{
 	private String login;
 	private String senha;
 	private boolean ativo;
+	//
+
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinTable(name = "usuario_perfil", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "id_perfil"))
+	private List<Perfil> perfis = new ArrayList<Perfil>();
 	
+	public List<Perfil> getPerfis() {
+		return perfis;
+	}
+
+	public void setPerfis(List<Perfil> perfis) {
+		this.perfis = perfis;
+	}
+
 	public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	@ElementCollection(targetClass = String.class,fetch=FetchType.EAGER)
-		@JoinTable(
-			name="usuario_permissao",
-			uniqueConstraints = {@UniqueConstraint(columnNames = {"id","permissao"})},
-			joinColumns = @JoinColumn(name="id"))
-	@Column(name="permissao", length=50)
-	private Set<String> permissao = new HashSet<String>();
-			
-			
-	
-	public Set<String> getPermissao() {
-		return permissao;
-	}
-
-	public void setPermissao(Set<String> permissao) {
-		this.permissao = permissao;
 	}
 
 	@Override

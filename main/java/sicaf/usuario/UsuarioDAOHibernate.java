@@ -7,9 +7,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import sicaf.util.DAOException;
 import sicaf.util.HibernateUtil;
 
 public class UsuarioDAOHibernate implements UsuarioDAO {
@@ -20,55 +20,102 @@ public class UsuarioDAOHibernate implements UsuarioDAO {
 		this.session = session;
 	}
 
-	public void salvar(Usuario usuario) {
-		this.session.save(usuario);
-	}
-
-	public void atualizar(Usuario usuario) {
-		if (usuario.getPermissao() == null || usuario.getPermissao().size() == 0) {
-			Usuario usuarioPermissao = this.carregar(usuario.getCodigo());
-			usuario.setPermissao(usuarioPermissao.getPermissao());
-			this.session.evict(usuarioPermissao);
+	public void salvar(Usuario usuario) throws DAOException {
+		try {
+			this.session = HibernateUtil.getSessionFactory().openSession();
+			this.session.beginTransaction();			
+			this.session.saveOrUpdate(usuario);
+			this.session.getTransaction().commit();
+		} catch (javax.persistence.PersistenceException e) {
+			if(this.session.getTransaction().isActive())
+				this.session.getTransaction().rollback();
+			throw (new DAOException(e.getMessage()));
+		} finally {
+			this.session.close();
 		}
-		this.session.update(usuario);
 	}
 
-	public void excluir(Usuario usuario) {
-		this.session.delete(usuario);
+
+	public void excluir(Usuario usuario) throws DAOException {
+		try {
+			this.session = HibernateUtil.getSessionFactory().openSession();
+			this.session.beginTransaction();
+			this.session.delete(usuario);
+			this.session.getTransaction().commit();
+		} catch (javax.persistence.EntityExistsException e) {
+			if(this.session.getTransaction().isActive())
+				this.session.getTransaction().rollback();
+			throw (new DAOException(e.getMessage()));
+		} finally {
+			session.close();
+		}
 	}
 
 	public Usuario carregar(Integer id) {
 		return (Usuario) this.session.get(Usuario.class, id);
 	}
-
-	public Usuario buscarPorLogin(String login) {
-		Session sessao = null;
-		Transaction transacao = null;
+	
+	public boolean isLoginExiste(String login) throws DAOException {
 		Query<?> consulta = null;
 		try {
-			sessao = HibernateUtil.getSessionFactory().openSession();
-			transacao = sessao.beginTransaction();
+			session = HibernateUtil.getSessionFactory().openSession();
 			String hql = "select u from Usuario u where u.login = ?";
-			consulta = sessao.createQuery(hql);
+			consulta = session.createQuery(hql);
 			consulta.setParameter(0, login);
-			transacao.commit();
+			return consulta.getResultList().size()>0;
+		} catch (javax.persistence.NoResultException e) {
+			throw new DAOException(e.getMessage());
+		} finally {
+			session.close();
+		}
+	}
+	
+	public boolean isLoginExiste(String login, Usuario usuario) throws DAOException {
+		Query<?> consulta = null;
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			String hql = "select u from Usuario u where u.login = ? and u = ?";
+			consulta = session.createQuery(hql);
+			consulta.setParameter(0, login);
+			consulta.setParameter(1, usuario);
+			return consulta.getResultList().size()>0;
+		} catch (javax.persistence.NoResultException e) {
+			throw new DAOException(e.getMessage());
+		} finally {
+			session.close();
+		}
+	}
+	
+
+	public Usuario buscarPorLogin(String login) throws DAOException {
+		Query<?> consulta = null;
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			String hql = "select u from Usuario u where u.login = ?";
+			consulta = session.createQuery(hql);
+			consulta.setParameter(0, login);
 			return (Usuario) consulta.getSingleResult();
 		} catch (javax.persistence.NoResultException e) {
-			throw new javax.persistence.NoResultException("Usuário inexistente");
+			throw new DAOException("Usuário inexistente");
 		} finally {
-			sessao.close();
+			session.close();
 		}
 	}
 
-	public List<Usuario> listar() {
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-
-		CriteriaQuery<Usuario> criteria = builder.createQuery(Usuario.class);
-		criteria.from(Usuario.class);
-		List<Usuario> usuarios = session.createQuery(criteria).getResultList();
-
+	public List<Usuario> listar() throws DAOException {
+		List<Usuario> usuarios = null;
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<Usuario> criteria = builder.createQuery(Usuario.class);
+			criteria.from(Usuario.class);
+			usuarios = session.createQuery(criteria).getResultList();
+		} catch (javax.persistence.NoResultException e) {
+			throw new DAOException("Usuário inexistente");
+		} finally {
+			session.close();
+		}
 		return usuarios;
 	}
 
-	
 }

@@ -25,5 +25,6 @@
 		<mapping class="sicaf.setor.Setor"/>
 		<mapping class="sicaf.pessoa.Pessoa"/>
 		<mapping class="sicaf.pessoaSetor.PessoaSetor"/>
+		<mapping class="sicaf.perfil.Perfil"/>
 	</session-factory>
 </hibernate-configuration>
