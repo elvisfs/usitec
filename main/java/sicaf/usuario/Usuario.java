@@ -27,17 +27,18 @@ public class Usuario implements Serializable{
 	@SequenceGenerator(name="usuarioGenerator",sequenceName="USUARIO_SEQ",allocationSize=10)
 	@GeneratedValue (strategy=GenerationType.SEQUENCE, generator="usuarioGenerator")
 	
-	private Integer id ;
+	private Integer idUsuario ;
 	private String nome;
 	private String email;
 	@org.hibernate.annotations.NaturalId
 	private String login;
 	private String senha;
 	private boolean ativo;
+	
 	//
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "usuario_perfil", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "id_perfil"))
+	@JoinTable(name = "usuario_perfil", joinColumns = @JoinColumn(name = "idUsuario"), inverseJoinColumns = @JoinColumn(name = "idPerfil"))
 	private List<Perfil> perfis = new ArrayList<Perfil>();
 	
 	public List<Perfil> getPerfis() {
@@ -48,20 +49,14 @@ public class Usuario implements Serializable{
 		this.perfis = perfis;
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
+	
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (ativo ? 1231 : 1237);
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((idUsuario == null) ? 0 : idUsuario.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
@@ -80,10 +75,10 @@ public class Usuario implements Serializable{
 		Usuario other = (Usuario) obj;
 		if (ativo != other.ativo)
 			return false;
-		if (id == null) {
-			if (other.id != null)
+		if (idUsuario == null) {
+			if (other.idUsuario != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!idUsuario.equals(other.idUsuario))
 			return false;
 		if (email == null) {
 			if (other.email != null)
@@ -108,12 +103,14 @@ public class Usuario implements Serializable{
 		return true;
 	}
 
-	public Integer getCodigo() {
-		return id;
+	
+
+	public Integer getIdUsuario() {
+		return idUsuario;
 	}
 
-	public void setCodigo(Integer codigo) {
-		this.id = codigo;
+	public void setIdUsuario(Integer idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 
 	public String getNome() {

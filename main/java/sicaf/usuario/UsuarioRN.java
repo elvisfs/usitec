@@ -26,11 +26,11 @@ public class UsuarioRN {
 	}
 
 	public void salvar(Usuario usuario) throws RNException {
-		Integer codigo = usuario.getCodigo();
+		Integer idUsuario = usuario.getIdUsuario();
 		
 		try {	
 			
-			if (codigo == null || codigo == 0) {
+			if (idUsuario == null || idUsuario == 0) {
 				this.usuarioDAO.isLoginExiste(usuario.getLogin());
 				this.usuarioDAO.salvar(usuario);
 			} else {

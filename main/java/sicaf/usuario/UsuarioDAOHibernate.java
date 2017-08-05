@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -47,7 +48,7 @@ public class UsuarioDAOHibernate implements UsuarioDAO {
 				this.session.getTransaction().rollback();
 			throw (new DAOException(e.getMessage()));
 		} finally {
-			session.close();
+			this.session.close();
 		}
 	}
 
@@ -58,7 +59,7 @@ public class UsuarioDAOHibernate implements UsuarioDAO {
 	public boolean isLoginExiste(String login) throws DAOException {
 		Query<?> consulta = null;
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSessionFactory().openSession();//
 			String hql = "select u from Usuario u where u.login = ?";
 			consulta = session.createQuery(hql);
 			consulta.setParameter(0, login);
@@ -66,14 +67,14 @@ public class UsuarioDAOHibernate implements UsuarioDAO {
 		} catch (javax.persistence.NoResultException e) {
 			throw new DAOException(e.getMessage());
 		} finally {
-			session.close();
+			session.close();//
 		}
 	}
 	
 	public boolean isLoginExiste(String login, Usuario usuario) throws DAOException {
 		Query<?> consulta = null;
 		try {
-			session = HibernateUtil.getSessionFactory().openSession();
+			session = HibernateUtil.getSessionFactory().openSession();//
 			String hql = "select u from Usuario u where u.login = ? and u = ?";
 			consulta = session.createQuery(hql);
 			consulta.setParameter(0, login);
@@ -82,7 +83,7 @@ public class UsuarioDAOHibernate implements UsuarioDAO {
 		} catch (javax.persistence.NoResultException e) {
 			throw new DAOException(e.getMessage());
 		} finally {
-			session.close();
+			session.close();//
 		}
 	}
 	
@@ -108,8 +109,8 @@ public class UsuarioDAOHibernate implements UsuarioDAO {
 			session = HibernateUtil.getSessionFactory().openSession();
 			CriteriaBuilder builder = session.getCriteriaBuilder();
 			CriteriaQuery<Usuario> criteria = builder.createQuery(Usuario.class);
-			criteria.from(Usuario.class);
-			usuarios = session.createQuery(criteria).getResultList();
+			Root<Usuario> from = criteria.from(Usuario.class); 
+			usuarios = session.createQuery(criteria.orderBy(builder.asc(from.get("nome")))).getResultList();
 		} catch (javax.persistence.NoResultException e) {
 			throw new DAOException("Usuário inexistente");
 		} finally {
