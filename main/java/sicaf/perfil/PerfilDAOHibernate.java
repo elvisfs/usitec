@@ -43,12 +43,11 @@ public class PerfilDAOHibernate implements PerfilDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<String> listarPerfisByUser(Integer idUsuario) throws DAOException {
+	public List<Perfil> listarPerfisByUser(Integer idUsuario) throws DAOException {
 		List<?> lista = null;
 		try {
 			this.session = HibernateUtil.getSessionFactory().openSession();
-			idUsuario = 1;
-			String sql = "select p.id_perfil from Perfil p join p.usuarios u where u.id = :idUsuario";
+			String sql = "select p from Perfil p join p.usuarios u where u.idUsuario = :idUsuario";
 			Query consulta = this.session.createQuery(sql);
 			consulta.setParameter("idUsuario", idUsuario);
 			consulta.getResultList();
@@ -58,7 +57,7 @@ public class PerfilDAOHibernate implements PerfilDAO {
 		} finally {
 			session.close();
 		}
-		return (List<String>) lista;
+		return (List<Perfil>) lista;
 
 	}
 
@@ -67,7 +66,7 @@ public class PerfilDAOHibernate implements PerfilDAO {
 		List<?> lista = null;
 		try {
 			this.session = HibernateUtil.getSessionFactory().openSession();
-			String sql = "select p1 from Perfil p1 where p1.id_perfil not in (select p.id_perfil from Perfil p join p.usuarios u where u.id = :idUsuario)";
+			String sql = "select p1 from Perfil p1 where p1.idPerfil not in (select p.idPerfil from Perfil p join p.usuarios u where u.idUsuario = :idUsuario)";
 			Query consulta = this.session.createQuery(sql);
 			consulta.setParameter("idUsuario", idUsuario);
 			consulta.getResultList();

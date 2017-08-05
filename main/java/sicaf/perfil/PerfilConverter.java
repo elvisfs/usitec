@@ -18,7 +18,7 @@ public class PerfilConverter implements Converter {
 	        Object dualList = ((PickList) arg1).getValue();
 	        DualListModel<?> dl = (DualListModel<?>) dualList;
 	        for (Object o : dl.getSource()) {
-	            String id = "" + ((Perfil) o).getId_perfil();
+	            String id = "" + ((Perfil) o).getIdPerfil();
 	            if (arg2.equals(id)) {
 	                ret = o;
 	                break;
@@ -26,7 +26,7 @@ public class PerfilConverter implements Converter {
 	        }
 	        if (ret == null)
 	            for (Object o : dl.getTarget()) {
-	                String id = "" + ((Perfil) o).getId_perfil();
+	                String id = "" + ((Perfil) o).getIdPerfil();
 	                if (arg2.equals(id)) {
 	                    ret = o;
 	                    break;
@@ -39,7 +39,7 @@ public class PerfilConverter implements Converter {
 	public String getAsString(FacesContext arg0, UIComponent arg1, Object arg2) {
 	    String str = "";
 	    if (arg2 instanceof Perfil) {
-	        str = "" + ((Perfil) arg2).getId_perfil();
+	        str = "" + ((Perfil) arg2).getIdPerfil();
 	    }
 	    return str;
 	}

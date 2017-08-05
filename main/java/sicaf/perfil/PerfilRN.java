@@ -28,7 +28,7 @@ public class PerfilRN {
 	
 		return perfilDAO.carregar(perfilSelecionado);
 	}
-	public List<String> listarPerfisbyIdUsuario(Integer idUsuario) throws RNException{
+	public List<Perfil> listarPerfisbyIdUsuario(Integer idUsuario) throws RNException{
 		try {
 			return perfilDAO.listarPerfisByUser(idUsuario);
 		} catch (DAOException e) {
