@@ -18,7 +18,6 @@ import sicaf.util.TipoPessoa;
 
 @Entity
 
-
 public class Pessoa implements Serializable{
 	/**
 	 * 
@@ -40,11 +39,12 @@ public class Pessoa implements Serializable{
 	private String estado;
 	private String telefone;
 	private String site;
-	private boolean flgCliente;
-	private boolean flgFornecedor;
-	
-	
-	private boolean flgFuncionario;
+	@Column(name="FLGCLIENTE")
+	private boolean cliente;
+	@Column(name="FLGFORNECEDOR")
+	private boolean fornecedor;
+	@Column(name="FLGFUNCIONARIO")
+	private boolean funcionario;
 	
 	private String cpf;
 	private String identidade;
@@ -56,24 +56,19 @@ public class Pessoa implements Serializable{
 	private List<PessoaSetor> setores;
 	
 		
-	public boolean isFlgCliente() {
-		return flgCliente;
+	public boolean isCliente() {
+		return cliente;
 	}
-	public void setFlgCliente(boolean flgCliente) {
-		this.flgCliente = flgCliente;
+	public void setCliente(boolean cliente) {
+		this.cliente = cliente;
 	}
-	public boolean isFlgFornecedor() {
-		return flgFornecedor;
+	public boolean isFornecedor() {
+		return fornecedor;
 	}
-	public void setFlgFornecedor(boolean flgFornecedor) {
-		this.flgFornecedor = flgFornecedor;
+	public void setFornecedor(boolean fornecedor) {
+		this.fornecedor = fornecedor;
 	}
-	public Integer getCodigo() {
-		return id;
-	}
-	public void setCodigo(Integer codigo) {
-		this.id = codigo;
-	}
+	
 	public String getNome() {
 		return nome;
 	}
@@ -122,11 +117,11 @@ public class Pessoa implements Serializable{
 	public void setSite(String site) {
 		this.site = site;
 	}
-	public boolean isFlgFuncionario() {
-		return flgFuncionario;
+	public boolean isFuncionario() {
+		return funcionario;
 	}
-	public void setFlgFuncionario(boolean flgFuncionario) {
-		this.flgFuncionario = flgFuncionario;
+	public void setFuncionario(boolean funcionario) {
+		this.funcionario = funcionario;
 	}
 	public String getEstado() {
 		return estado;
