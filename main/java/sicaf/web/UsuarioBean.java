@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
@@ -22,7 +21,7 @@ import sicaf.usuario.UsuarioRN;
 import sicaf.util.RNException;
 
 @ManagedBean(name = "usuarioBean")
-@RequestScoped
+
 
 public class UsuarioBean {
 	private Usuario usuario = new Usuario();
@@ -31,7 +30,18 @@ public class UsuarioBean {
 	private String senhaCriptografada;
 	private List<Usuario> lista;
 	private boolean modoEditar;
-	private DualListModel<Perfil> perfis;
+	private DualListModel<Perfil> dLPerfis;
+
+	
+	
+
+	public DualListModel<Perfil> getdLPerfis() {
+		return dLPerfis;
+	}
+
+	public void setdLPerfis(DualListModel<Perfil> dLPerfis) {
+		this.dLPerfis = dLPerfis;
+	}
 
 	@PostConstruct
 	public void init() {
@@ -47,21 +57,12 @@ public class UsuarioBean {
 			e.printStackTrace();
 		}
 			List<Perfil> themesTarget = new ArrayList<Perfil>();
-			perfis = new DualListModel<Perfil>(themesSource, themesTarget);
+			dLPerfis = new DualListModel<Perfil>(themesSource, themesTarget);
 		
 
 	}
 
-	public void adicionarPerfil() {
-		/*
-		 * if(!this.perfilSelecionado.equals(0)){ PerfilRN perfilRN = new
-		 * PerfilRN(); Perfil perfil =
-		 * perfilRN.carregar(this.perfilSelecionado);
-		 * this.usuario.getPerfis().add(perfil); }
-		 */
-
-	}
-
+	
 	private String destinoSalvar;
 
 	public String getDestinoSalvar() {
@@ -105,17 +106,10 @@ public class UsuarioBean {
 	public void salvar() {
 		FacesContext context = FacesContext.getCurrentInstance();
 
-		this.usuario.setPerfis(this.perfis.getTarget());
-
-		// List<Perfil> perfisSelecionados = this.perfis.getTarget();
+		this.usuario.setPerfis(this.getdLPerfis().getTarget());
 		
 		String senha = this.usuario.getSenha();
-		/*
-		 * if(!this.perfilSelecionado.equals(0)){ PerfilRN perfilRN = new
-		 * PerfilRN(); Perfil perfil =
-		 * perfilRN.carregar(this.perfilSelecionado);
-		 * this.usuario.getPerfis().add(perfil); }
-		 */
+		
 		if (!senha.equals(this.confirmarSenha)) {
 			FacesMessage facesMessage = new FacesMessage("A senha não foi confirmada corretamente");
 			context.addMessage(null, facesMessage);
@@ -193,33 +187,13 @@ public class UsuarioBean {
 		this.senhaCriptografada = senhaCriptografada;
 	}
 
-	/*
-	 * public String[] getPerfisSelecionados() { return perfisSelecionados; }
-	 * 
-	 * public void setPerfisSelecionados(String[] perfilsSelecionados) {
-	 * this.perfisSelecionados = perfilsSelecionados; }
-	 * 
-	 * public List<Perfil> getListaPerfis() {
-	 * 
-	 * return listaPerfis; }
-	 */
-
-	public DualListModel<Perfil> getPerfis() {
-
-		return perfis;
-	}
-
-	public void setPerfis(DualListModel<Perfil> perfis) {
-		this.perfis = perfis;
-	}
-
+	
 	public void onTransfer(TransferEvent event) {
 		StringBuilder builder = new StringBuilder();
 		for (Object item : event.getItems()) {
 			builder.append(((Perfil) item).getDescricao()).append("<br />");
 		}
-
-		FacesMessage msg = new FacesMessage();
+			FacesMessage msg = new FacesMessage();
 		msg.setSeverity(FacesMessage.SEVERITY_INFO);
 		msg.setSummary("Items Transferred");
 		msg.setDetail(builder.toString());
@@ -246,11 +220,11 @@ public class UsuarioBean {
 	public void setModoEditar(boolean modoEditar) {
 		if(modoEditar){
 			for(Perfil p:this.usuario.getPerfis()){
-				this.perfis.getTarget().add(p);
+				this.dLPerfis.getTarget().add(p);
 			}
 			PerfilRN perfilRN = new PerfilRN();
 			try {
-				this.perfis.setSource(perfilRN.listarPerfilsNaoAtribuidos(this.usuario.getId()));
+				this.dLPerfis.setSource(perfilRN.listarPerfilsNaoAtribuidos(this.usuario.getIdUsuario()));
 			} catch (RNException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

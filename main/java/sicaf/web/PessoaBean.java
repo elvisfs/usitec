@@ -13,10 +13,12 @@ import javax.faces.context.FacesContext;
 import sicaf.pessoa.Pessoa;
 import sicaf.pessoa.PessoaRN;
 import sicaf.pessoaSetor.PessoaSetor;
+import sicaf.util.RNException;
 import sicaf.util.TipoPessoa;
 
 @ManagedBean(name = "pessoaBean")
 @ViewScoped
+
 public class PessoaBean implements Serializable{
 
 	private Pessoa pessoa = new Pessoa();
@@ -65,6 +67,10 @@ public class PessoaBean implements Serializable{
 		return "/restrito/pessoa";
 	}
 	
+	public String editar(){
+		
+		return "/restrito/pessoa";
+	}
 	public void salvar() {
 		FacesContext context = FacesContext.getCurrentInstance();	
 		PessoaRN pessoaRN = new PessoaRN();
@@ -76,7 +82,12 @@ public class PessoaBean implements Serializable{
 	
 	public String excluir(){
 		PessoaRN pessoaRN = new PessoaRN();
-		pessoaRN.excluir(this.pessoa);
+		try {
+			pessoaRN.excluir(this.pessoa);
+		} catch (RNException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.lista = null;
 		return null;
 	}
