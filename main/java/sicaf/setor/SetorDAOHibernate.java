@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -67,20 +68,14 @@ public class SetorDAOHibernate implements SetorDAO {
 	public List<Setor> listar() throws DAOException {
 		try {
 			this.session = HibernateUtil.getSessionFactory().openSession();
-			this.session.beginTransaction();
-
 			CriteriaBuilder builder = session.getCriteriaBuilder();
-
-			CriteriaQuery<Setor> criteria = builder.createQuery(Setor.class);
-			criteria.from(Setor.class);
-			List<Setor> setores = session.createQuery(criteria).getResultList();
-			this.session.getTransaction().commit();
+			CriteriaQuery<Setor> criteria = builder.createQuery(Setor.class); 
+			Root<Setor> from = criteria.from(Setor.class);
+			List<Setor> setores = session.createQuery(criteria.orderBy(builder.asc(from.get("nomeSetor")))).getResultList();
 			return setores;
 		} catch (javax.persistence.EntityNotFoundException e) {
 			throw new DAOException("Não há setores cadastrados");
 		} finally {
-			if (this.session.getTransaction().isActive())
-				this.session.getTransaction().rollback();
 			this.session.close();
 		}
 
@@ -115,15 +110,5 @@ public class SetorDAOHibernate implements SetorDAO {
 		}
 
 	}
-	/*
-	String hql = "select s.nomeSetor from Setor s where s.nomeSetor = :nomeSetor and s.id != :idSetor";
-	String nomeSetor = setor.getNomeSetor();
-	Integer idSetor = setor.getId();
-	Query<?> consulta = this.session.createQuery(hql);
-	consulta.setParameter("nomeSetor", nomeSetor);
-	consulta.setParameter("idSetor", idSetor);
-	if (consulta.getResultList().size() > 0) {
-		throw new DAOException("Setor já existente");
-	}*/
 
 }
