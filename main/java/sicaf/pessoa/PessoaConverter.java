@@ -6,7 +6,6 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 import sicaf.util.DAOFactory;
-import sicaf.util.HibernateUtil;
 @FacesConverter(forClass=Pessoa.class)
 public class PessoaConverter implements Converter{
 

@@ -1,40 +1,54 @@
 package sicaf.util;
 
 import sicaf.categoria.CategoriaDAO;
-import sicaf.categoria.CategoriaDAOHibernate;
+import sicaf.cidade.CidadeDAO;
+import sicaf.contato.ContatoDAO;
 import sicaf.perfil.PerfilDAO;
-import sicaf.perfil.PerfilDAOHibernate;
 import sicaf.pessoa.PessoaDAO;
-import sicaf.pessoa.PessoaDAOHibernate;
+import sicaf.pessoaSetor.PessoaSetorDAO;
 import sicaf.setor.SetorDAO;
-import sicaf.setor.SetorDAOHibernate;
 import sicaf.usuario.UsuarioDAO;
-import sicaf.usuario.UsuarioDAOHibernate;
 
 public class DAOFactory {
 	public static UsuarioDAO criarUsuarioDAO() {
-		UsuarioDAOHibernate usuarioDAO = new UsuarioDAOHibernate();
+		UsuarioDAO usuarioDAO = new UsuarioDAO();
 		usuarioDAO.setSession(HibernateUtil.getSessionFactory().getCurrentSession());
 		return usuarioDAO;
 	}
 	public static CategoriaDAO criarCategoriaDAO(){
-		CategoriaDAOHibernate categoriaDAO = new CategoriaDAOHibernate();
+		CategoriaDAO categoriaDAO = new CategoriaDAO();
 		categoriaDAO.setSession(HibernateUtil.getSessionFactory().getCurrentSession());
 		return categoriaDAO;
 	}
 	public static SetorDAO criarSetorDAO(){
-		SetorDAOHibernate setorDAO = new SetorDAOHibernate();
+		SetorDAO setorDAO = new SetorDAO();
 		setorDAO.setSession(HibernateUtil.getSessionFactory().getCurrentSession());
 		return setorDAO;
 	}
 	public static PessoaDAO criarPessoaDAO() {
-		PessoaDAOHibernate pessoaDAO = new PessoaDAOHibernate();
+		PessoaDAO pessoaDAO = new PessoaDAO();
 		pessoaDAO.setSession(HibernateUtil.getSessionFactory().getCurrentSession());
 		return (PessoaDAO) pessoaDAO;
 	}
 	public static PerfilDAO criarPerfilDAO() {
-		PerfilDAOHibernate perfilDAO = new PerfilDAOHibernate();
+		PerfilDAO perfilDAO = new PerfilDAO();
 		perfilDAO.setSession(HibernateUtil.getSessionFactory().getCurrentSession());
 		return (PerfilDAO) perfilDAO;
+	}
+	public static ContatoDAO criarContatoDAO() {
+		ContatoDAO contatoDAO = new ContatoDAO();
+		contatoDAO.setSession(HibernateUtil.getSessionFactory().getCurrentSession());
+		return (ContatoDAO) contatoDAO;
+	}
+	public static PessoaSetorDAO criarPessoaSetorDAO(){
+		PessoaSetorDAO pessoaSetorDAO = new PessoaSetorDAO();
+		pessoaSetorDAO.setSession(HibernateUtil.getSessionFactory().getCurrentSession());
+		return pessoaSetorDAO;
+	}
+	public static CidadeDAO criarCidadeDAO(){
+		CidadeDAO cidadeDAO = new CidadeDAO();
+		cidadeDAO.setSession(HibernateUtil.getSessionFactory().getCurrentSession());
+		return cidadeDAO;
+		
 	}
 }

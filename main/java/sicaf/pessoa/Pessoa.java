@@ -1,18 +1,24 @@
 package sicaf.pessoa;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
 
+import sicaf.cidade.Cidade;
 import sicaf.pessoaSetor.PessoaSetor;
 import sicaf.util.TipoPessoa;
 
@@ -30,13 +36,23 @@ public class Pessoa implements Serializable{
 	private Integer id;
 	@Column(nullable=false)
 	private String nome;
+	public Pessoa(String nome) {
+		super();
+		this.nome = nome;
+	}
+	public Pessoa(){
+		
+	}
+
 	@Enumerated(EnumType.STRING)
 	private TipoPessoa tipo;
 	private String endereco;
 	private String bairro;
 	private String cep;
-	private String cidade;
-	private String estado;
+	
+	@ManyToOne
+	private Cidade cidade;
+
 	private String telefone;
 	private String site;
 	@Column(name="FLGCLIENTE")
@@ -45,17 +61,31 @@ public class Pessoa implements Serializable{
 	private boolean fornecedor;
 	@Column(name="FLGFUNCIONARIO")
 	private boolean funcionario;
-	
+	@Transient
+	private String tipoContato;
 	private String cpf;
 	private String identidade;
 	
 	private String cnpj;
 	private String inscricaoEstadual;
 	
-	@OneToMany(mappedBy="pessoa")
-	private List<PessoaSetor> setores;
+	@Transient
+	private Boolean isPessoaFisica;
+	@Transient
+	private Boolean isPessoaJuridica;
+	
+	@OneToMany (fetch = FetchType.EAGER, mappedBy="pessoa", cascade=CascadeType.PERSIST)
+	private List<PessoaSetor> setores = new ArrayList<PessoaSetor>();
 	
 		
+	public Boolean getIsPessoaFisica() {
+		return (TipoPessoa.FISICA.equals(this.tipo));
+	}
+	
+	public Boolean getIsPessoaJuridica() {
+		return (TipoPessoa.JURIDICA.equals(this.tipo));
+	}
+	
 	public boolean isCliente() {
 		return cliente;
 	}
@@ -99,12 +129,7 @@ public class Pessoa implements Serializable{
 	public void setCep(String cep) {
 		this.cep = cep;
 	}
-	public String getCidade() {
-		return cidade;
-	}
-	public void setCidade(String cidade) {
-		this.cidade = cidade;
-	}
+	
 	public String getTelefone() {
 		return telefone;
 	}
@@ -123,25 +148,20 @@ public class Pessoa implements Serializable{
 	public void setFuncionario(boolean funcionario) {
 		this.funcionario = funcionario;
 	}
-	public String getEstado() {
-		return estado;
-	}
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
 	
+	public Cidade getCidade() {
+		return cidade;
+	}
+	public void setCidade(Cidade cidade) {
+		this.cidade = cidade;
+	}
 	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public List<PessoaSetor> getSetores() {
-		return setores;
-	}
-	public void setSetores(List<PessoaSetor> setores) {
-		this.setores = setores;
-	}
+	
 	
 	public String getCpf() {
 		return cpf;
@@ -166,6 +186,34 @@ public class Pessoa implements Serializable{
 	}
 	public void setInscricaoEstadual(String inscricaoEstadual) {
 		this.inscricaoEstadual = inscricaoEstadual;
+	}
+	public String getTipoContato() {
+		StringBuilder tipo = new StringBuilder();
+		if(this.isFornecedor()){
+			if(tipo.length()>0) tipo.append(", ");				
+			tipo.append("Fornecedor");
+		}
+		if(this.isCliente()){
+			if(tipo.length()>0) tipo.append(", ");				
+			tipo.append("Cliente");
+		}
+		if(this.isFuncionario()){
+			if(tipo.length()>0) tipo.append(", ");				
+			tipo.append("Funcionario");
+		}
+		
+		return tipo.toString();
+	}
+	public void setTipoContato(String tipoContato) {
+		this.tipoContato = tipoContato;
+	}
+	
+	public List<PessoaSetor> getSetores() {
+		return setores;
+	}
+
+	public void setSetores(List<PessoaSetor> setores) {
+		this.setores = setores;
 	}
 	
 }

@@ -8,9 +8,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 
-import org.primefaces.event.SelectEvent;
-import org.primefaces.event.TransferEvent;
-import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.DualListModel;
 import org.springframework.util.DigestUtils;
 
@@ -32,8 +29,6 @@ public class UsuarioBean {
 	private boolean modoEditar;
 	private DualListModel<Perfil> dLPerfis;
 
-	
-	
 
 	public DualListModel<Perfil> getdLPerfis() {
 		return dLPerfis;
@@ -45,8 +40,6 @@ public class UsuarioBean {
 
 	@PostConstruct
 	public void init() {
-		
-		
 			PerfilRN perfilRN = new PerfilRN();
 			List<Perfil> themesSource = null;
 			try {
@@ -93,6 +86,7 @@ public class UsuarioBean {
 
 	public String novo() {
 		this.usuario = new Usuario();
+		this.init();
 		this.usuario.setAtivo(true);
 		return "/admin/usuario";
 	}
@@ -188,30 +182,6 @@ public class UsuarioBean {
 	}
 
 	
-	public void onTransfer(TransferEvent event) {
-		StringBuilder builder = new StringBuilder();
-		for (Object item : event.getItems()) {
-			builder.append(((Perfil) item).getDescricao()).append("<br />");
-		}
-			FacesMessage msg = new FacesMessage();
-		msg.setSeverity(FacesMessage.SEVERITY_INFO);
-		msg.setSummary("Items Transferred");
-		msg.setDetail(builder.toString());
-
-		FacesContext.getCurrentInstance().addMessage(null, msg);
-	}
-
-	public void onSelect(SelectEvent event) {
-		FacesContext context = FacesContext.getCurrentInstance();
-		context.addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Selected", event.getObject().toString()));
-	}
-
-	public void onUnselect(UnselectEvent event) {
-		FacesContext context = FacesContext.getCurrentInstance();
-		context.addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Unselected", event.getObject().toString()));
-	}
 
 	public boolean isModoEditar() {
 		return modoEditar;

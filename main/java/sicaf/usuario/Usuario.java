@@ -37,8 +37,8 @@ public class Usuario implements Serializable{
 	
 	//
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "usuario_perfil", joinColumns = @JoinColumn(name = "idUsuario"), inverseJoinColumns = @JoinColumn(name = "idPerfil"))
+	@ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+	//@JoinTable(name = "usuario_perfil", joinColumns = @JoinColumn(name = "idUsuario"), inverseJoinColumns = @JoinColumn(name = "idPerfil"))
 	private List<Perfil> perfis = new ArrayList<Perfil>();
 	
 	public List<Perfil> getPerfis() {

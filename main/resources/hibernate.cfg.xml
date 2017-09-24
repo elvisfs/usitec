@@ -21,10 +21,12 @@
 		<property name="use_sql_comments">true</property>
 		<property name="hbm2ddl.auto">update</property>
 		<mapping class="sicaf.usuario.Usuario"/>
+		<mapping class="sicaf.pessoaSetor.PessoaSetor"/>
 		<mapping class="sicaf.categoria.Categoria"/>
 		<mapping class="sicaf.setor.Setor"/>
 		<mapping class="sicaf.pessoa.Pessoa"/>
-		<mapping class="sicaf.pessoaSetor.PessoaSetor"/>
+		<mapping class="sicaf.contato.Contato"/>
 		<mapping class="sicaf.perfil.Perfil"/>
+		<mapping class="sicaf.cidade.Cidade"/>
 	</session-factory>
 </hibernate-configuration>

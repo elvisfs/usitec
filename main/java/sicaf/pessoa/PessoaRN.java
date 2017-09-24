@@ -2,10 +2,13 @@ package sicaf.pessoa;
 
 import java.util.List;
 
+import sicaf.contato.Contato;
 import sicaf.pessoaSetor.PessoaSetor;
+import sicaf.pessoaSetor.PessoaSetorRN;
 import sicaf.util.DAOException;
 import sicaf.util.DAOFactory;
 import sicaf.util.RNException;
+import sicaf.util.TipoPessoa;
 
 public class PessoaRN {
 	private PessoaDAO pessoaDAO;
@@ -18,18 +21,30 @@ public class PessoaRN {
 		return this.pessoaDAO.carregar(codigo);
 	}
 
-	public void salvar(Pessoa pessoa) {
+	public void salvar(Pessoa pessoa) throws RNException {
 		Integer id = pessoa.getId();
+		Pessoa pessoaMerge = null;
+		
 		try {
+			if(pessoa.getTipo() == TipoPessoa.FISICA ){
+				pessoa.setCnpj(null);
+				pessoa.setInscricaoEstadual(null);
+			}
+			else if(pessoa.getTipo() == TipoPessoa.JURIDICA){
+				pessoa.setCpf(null);
+				pessoa.setIdentidade(null);
+			}
+			
 			if(id == null || id== 0){
-			pessoaDAO.salvar(pessoa);
+				pessoaDAO.salvar(pessoa);
 			}
 			else{
 				pessoaDAO.atualizar(pessoa);
 			}
+			
 		} catch (DAOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw (new RNException(e.getMessage()));
+			
 		}
 
 	}
@@ -41,10 +56,10 @@ public class PessoaRN {
 			throw (new RNException(e.getMessage()));
 		}
 	}
-
-	public List<Pessoa> listar() {
+	
+	public List<Pessoa> listar(String relacionamento) {
 		try {
-			return this.pessoaDAO.listar();
+			return this.pessoaDAO.listar(relacionamento);
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,7 +67,7 @@ public class PessoaRN {
 		return null;
 	}
 
-	public List<PessoaSetor> listarSetores() {
+	public List<Contato> listarSetores() {
 		return this.pessoaDAO.listarSetores();
 	}
 }

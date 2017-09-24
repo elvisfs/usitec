@@ -10,7 +10,6 @@ import javax.faces.context.FacesContext;
 
 import sicaf.setor.Setor;
 import sicaf.setor.SetorRN;
-import sicaf.util.DAOException;
 import sicaf.util.RNException;
 
 @ManagedBean(name = "setorBean")
@@ -52,7 +51,7 @@ public class SetorBean implements Serializable {
 			setorRN.salvar(this.setor);
 			context.addMessage(null, (new FacesMessage("Registro salvo com sucesso")));
 			this.setor = new Setor();
-		} catch (DAOException e) {
+		} catch (RNException e) {
 			context.addMessage(null, (new FacesMessage(e.getMessage())));;
 		} 
 	}
@@ -74,7 +73,7 @@ public class SetorBean implements Serializable {
 	}
 
 	public String novo() {
-
+		this.setor = new Setor();
 		return "/restrito/setor";
 	}
 }

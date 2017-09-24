@@ -37,8 +37,9 @@ public class Perfil implements GrantedAuthority {
 
 	private String descricao;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "usuario_perfil", joinColumns = @JoinColumn(name = "idPerfil"), inverseJoinColumns = @JoinColumn(name = "idUsuario"))
+	@ManyToMany(fetch = FetchType.EAGER,  mappedBy="perfis")
+	//@JoinTable(name = "usuario_perfil", joinColumns = @JoinColumn(name = "idPerfil"), inverseJoinColumns = @JoinColumn(name = "idUsuario"))
+	
 	private List<Usuario> usuarios = new ArrayList<Usuario>();
 
 	public String getDescricao() {
@@ -63,11 +64,12 @@ public class Perfil implements GrantedAuthority {
 	}
 
 	public Perfil(){}
-	public Perfil(Integer idPerfil, String descricao, List<Usuario> usuarios) {
+	public Perfil(Integer idPerfil, String descricao) {
 		super();
 		this.idPerfil = idPerfil;
 		this.descricao = descricao;
-		this.usuarios = usuarios;
+		
 	}
 
 }
+
