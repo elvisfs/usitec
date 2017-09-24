@@ -1,4 +1,4 @@
-package sicaf.pessoa;
+package sicaf.cidade;
 
 import java.util.List;
 
@@ -8,23 +8,21 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 
-import sicaf.pessoaSetor.PessoaSetor;
 import sicaf.util.DAOException;
 import sicaf.util.HibernateUtil;
 
-public class PessoaDAOHibernate implements PessoaDAO {
+public class CidadeDAO {
 	private Session session;
 
 	public void setSession(Session session) {
 		this.session = session;
 	}
-
-	@Override
-	public void salvar(Pessoa pessoa) throws DAOException {
+	
+	public void salvar(Cidade cidade) throws DAOException {
 		try {
 			this.session = HibernateUtil.getSessionFactory().openSession();
 			this.session.beginTransaction();
-			this.session.save(pessoa);
+			this.session.merge(cidade);
 			this.session.getTransaction().commit();
 		} catch (javax.persistence.PersistenceException e) {
 			if (this.session.getTransaction().isActive())
@@ -35,12 +33,12 @@ public class PessoaDAOHibernate implements PessoaDAO {
 		}
 
 	}
-	
-	public void atualizar(Pessoa pessoa) throws DAOException{
+
+	public void atualizar(Cidade cidade) throws DAOException {
 		try {
 			this.session = HibernateUtil.getSessionFactory().openSession();
 			this.session.beginTransaction();
-			this.session.update(pessoa);
+			this.session.saveOrUpdate(cidade);
 			this.session.getTransaction().commit();
 		} catch (javax.persistence.PersistenceException e) {
 			if (this.session.getTransaction().isActive())
@@ -51,12 +49,11 @@ public class PessoaDAOHibernate implements PessoaDAO {
 		}
 	}
 
-	@Override
-	public void excluir(Pessoa pessoa) throws DAOException {
+	public void excluir(Cidade cidade) throws DAOException {
 		try {
 			this.session = HibernateUtil.getSessionFactory().openSession();
 			this.session.beginTransaction();
-			this.session.delete(pessoa);
+			this.session.delete(cidade);
 			this.session.getTransaction().commit();
 
 		} catch (javax.persistence.PersistenceException e) {
@@ -68,42 +65,30 @@ public class PessoaDAOHibernate implements PessoaDAO {
 		}
 	}
 
-	@Override
-	public Pessoa carregar(Integer id) {
+	public Cidade carregar(Integer codigo) {
 		this.session = HibernateUtil.getSessionFactory().openSession();
-		Pessoa pessoa = (Pessoa) (this.session.get(Pessoa.class, id));
+		Cidade cidade = (Cidade) (this.session.get(Cidade.class, codigo));
 		this.session.close();
-		return pessoa ;
+		return cidade ;
 	}
 
-	@Override
-	public List<Pessoa> listar() throws DAOException {
-		List<Pessoa> pessoas = null;
-				
+	List<Cidade> listar() throws DAOException {
+		List<Cidade> cidades = null;
+		
 		try {
 			this.session = HibernateUtil.getSessionFactory().openSession();
 			CriteriaBuilder builder = session.getCriteriaBuilder();
-			CriteriaQuery<Pessoa> criteria = builder.createQuery(Pessoa.class);
-			Root<Pessoa> from = criteria.from(Pessoa.class);		
-			pessoas = session.createQuery(criteria.orderBy(builder.asc(from.get("nome")))).getResultList();
+			CriteriaQuery<Cidade> query = builder.createQuery(Cidade.class);
+			Root<Cidade> root = query.from(Cidade.class);
+			cidades = session.createQuery(query.orderBy(builder.asc(root.get("nome")))).getResultList();
 		} catch (javax.persistence.PersistenceException e) {
 			throw (new DAOException(e.getMessage()));
 		} finally {
 			this.session.close();
 		}
 
-		return pessoas;
+		return cidades;
 	}
 
-	public List<PessoaSetor> listarSetores() {
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-
-		CriteriaQuery<PessoaSetor> criteria = builder.createQuery(PessoaSetor.class);
-		criteria.from(Pessoa.class);
-		List<PessoaSetor> pessoas = session.createQuery(criteria).getResultList();
-
-		return pessoas;
-
-	}
-
+	
 }
