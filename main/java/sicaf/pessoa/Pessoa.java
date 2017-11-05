@@ -19,6 +19,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
 
 import sicaf.cidade.Cidade;
+import sicaf.contato.Contato;
 import sicaf.pessoaSetor.PessoaSetor;
 import sicaf.util.TipoPessoa;
 
@@ -74,9 +75,11 @@ public class Pessoa implements Serializable{
 	@Transient
 	private Boolean isPessoaJuridica;
 	
-	@OneToMany (fetch = FetchType.EAGER, mappedBy="pessoa", cascade=CascadeType.PERSIST)
+	@OneToMany (fetch = FetchType.EAGER, mappedBy="pessoa", cascade=CascadeType.MERGE, orphanRemoval = true)
 	private List<PessoaSetor> setores = new ArrayList<PessoaSetor>();
 	
+	@OneToMany (fetch = FetchType.EAGER, mappedBy="pessoa")
+	private List<Contato> contatos =new ArrayList<Contato>();
 		
 	public Boolean getIsPessoaFisica() {
 		return (TipoPessoa.FISICA.equals(this.tipo));
@@ -214,6 +217,12 @@ public class Pessoa implements Serializable{
 
 	public void setSetores(List<PessoaSetor> setores) {
 		this.setores = setores;
+	}
+	public List<Contato> getContatos() {
+		return contatos;
+	}
+	public void setContatos(List<Contato> contatos) {
+		this.contatos = contatos;
 	}
 	
 }
