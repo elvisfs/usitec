@@ -18,7 +18,6 @@ import sicaf.cidade.CidadeRN;
 import sicaf.pessoa.Pessoa;
 import sicaf.pessoa.PessoaRN;
 import sicaf.pessoaSetor.PessoaSetor;
-import sicaf.pessoaSetor.PessoaSetorRN;
 import sicaf.setor.Setor;
 import sicaf.setor.SetorRN;
 import sicaf.util.RNException;
@@ -38,14 +37,13 @@ public class PessoaBean implements Serializable {
 	private Pessoa pessoa = new Pessoa();
 	private List<Pessoa> lista;
 	private List<TipoPessoa> tipos;
-	private Boolean btnContatoDisable;
+	private String idPessoa;
 	private List<Setor> setoresSelecionados;
 	private List<PessoaSetor> setores = new ArrayList<PessoaSetor>();
 
 	private PessoaSetor pessoaSetor;
-	private List<PessoaSetor> setoresExcluir = new ArrayList<PessoaSetor>();
 
-	private Boolean selecionado;
+
 	private ArrayList<Setor> listaSetores;
 
 	@PostConstruct
@@ -60,7 +58,6 @@ public class PessoaBean implements Serializable {
 		try {
 			this.listaSetores = setorRN.listar();
 		} catch (RNException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -96,27 +93,25 @@ public class PessoaBean implements Serializable {
 		return "/restrito/pessoa";
 	}
 
+	public String contatos(){
+		
+	    return "contato?faces-redirect=true&includeViewParams=true&pessoa="+pessoa;
+	}
 	public void salvar() {
 		FacesContext context = FacesContext.getCurrentInstance();
 		PessoaRN pessoaRN = new PessoaRN();
-		PessoaSetorRN pessoaSetorRN = new PessoaSetorRN();
 		try {
-			for(PessoaSetor pessoaSetor:this.setoresExcluir)
-				pessoaSetorRN.excluirSetor(pessoaSetor);
-			pessoaRN.salvar(this.pessoa);			
+			this.pessoa = pessoaRN.salvar(this.pessoa);
 			context.addMessage(null, (new FacesMessage("Registro atualizado com sucesso")));
 		} catch (RNException e) {
-			// TODO Auto-generated catch block
 			context.addMessage(null, (new FacesMessage(e.getMessage())));
 		}
 
 	}
 
 	public void excluirSetor() {
-		if(this.pessoaSetor.getId()!=null)
-			this.setoresExcluir.add(this.pessoaSetor);
 		this.pessoa.getSetores().remove(this.pessoaSetor);
-		
+
 	}
 
 	public String voltar() {
@@ -142,17 +137,16 @@ public class PessoaBean implements Serializable {
 			PessoaSetor pessoaSetor = new PessoaSetor();
 			pessoaSetor.setSetor(set);
 			pessoaSetor.setPessoa(pessoa);
-			for(PessoaSetor p:this.pessoa.getSetores()){
-				if(pessoaSetor.getPessoa().equals(p.getPessoa()) 
-						&& pessoaSetor.getSetor().equals(p.getSetor()))
+			for (PessoaSetor p : this.pessoa.getSetores()) {
+				if (pessoaSetor.getPessoa().equals(p.getPessoa()) && pessoaSetor.getSetor().equals(p.getSetor()))
 					setorEncontrado = true;
-					
+
 			}
-			if(setorEncontrado == false)
+			if (setorEncontrado == false)
 				this.pessoa.getSetores().add(pessoaSetor);
 		}
 	}
-	
+
 	public void onRelacionamentoChange() {
 		this.getLista();
 	}
@@ -185,10 +179,7 @@ public class PessoaBean implements Serializable {
 			return false;
 	}
 
-	public void setBtnContatoDisable(Boolean btnContatoDisable) {
-		this.btnContatoDisable = btnContatoDisable;
-	}
-
+	
 	public List<Setor> getSetoresSelecionados() {
 		return setoresSelecionados;
 	}
@@ -221,26 +212,34 @@ public class PessoaBean implements Serializable {
 	public void setSetores(List<PessoaSetor> setores) {
 		this.setores = setores;
 	}
-	
+
 	public List<Cidade> completeCidade(String query) {
 		CidadeRN cidadeRN = new CidadeRN();
-        List<Cidade> listaCidades = null;
+		List<Cidade> listaCidades = null;
 		try {
 			listaCidades = cidadeRN.listar();
 		} catch (RNException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        List<Cidade> filtroCidades = new ArrayList<Cidade>();
-         
-        for (int i = 0; i < listaCidades.size(); i++) {
-            Cidade skin = listaCidades.get(i);
-            if(skin.getNome().toLowerCase().startsWith(query)) {
-            	filtroCidades.add(skin);
-            }
-        }
-         
-        return filtroCidades;
-    }
+		List<Cidade> filtroCidades = new ArrayList<Cidade>();
+
+		for (int i = 0; i < listaCidades.size(); i++) {
+			Cidade skin = listaCidades.get(i);
+			if (skin.getNome().toLowerCase().startsWith(query)) {
+				filtroCidades.add(skin);
+			}
+		}
+
+		return filtroCidades;
+	}
+
+	public String getIdPessoa() {
+		return idPessoa;
+	}
+
+	public void setIdPessoa(String idPessoa) {
+		this.idPessoa = idPessoa;
+	}
 
 }
