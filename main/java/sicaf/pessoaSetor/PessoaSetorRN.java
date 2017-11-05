@@ -1,5 +1,8 @@
 package sicaf.pessoaSetor;
 
+import java.util.List;
+
+import sicaf.contato.Contato;
 import sicaf.pessoa.Pessoa;
 import sicaf.util.DAOException;
 import sicaf.util.DAOFactory;
@@ -36,6 +39,19 @@ public class PessoaSetorRN {
 			throw (new RNException(e.getMessage()));
 		}
 		
+	}
+
+	public List<Contato> listarContatosIdPessoa(Integer id) {
+		
+		return this.pessoaSetorDAO.listarContatos(id);
+	}
+	
+	public List<PessoaSetor> listaSetoresPorPessoa(Pessoa pessoa) throws RNException {
+		try {
+			return this.pessoaSetorDAO.listarSetores(pessoa);
+		} catch (DAOException e) {
+			throw (new RNException(e.getMessage()));
+		}
 	}
 	
 }

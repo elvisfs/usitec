@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import sicaf.contato.Contato;
 import sicaf.pessoa.Pessoa;
 import sicaf.setor.Setor;
 
@@ -26,6 +27,10 @@ public class PessoaSetor {
 	@ManyToOne
 	@JoinColumn(name="setor_id")
 	private Setor setor;
+	
+	@ManyToOne
+	@JoinColumn(name="contato_id")
+	private Contato contato;
 	
 	private String telefone;
 
@@ -50,6 +55,14 @@ public class PessoaSetor {
 		return telefone;
 	}
 
+	public Contato getContato() {
+		return contato;
+	}
+
+	public void setContato(Contato contato) {
+		this.contato = contato;
+	}
+
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
@@ -61,4 +74,5 @@ public class PessoaSetor {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
 }
