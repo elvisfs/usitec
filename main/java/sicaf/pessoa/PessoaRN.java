@@ -21,8 +21,7 @@ public class PessoaRN {
 		return this.pessoaDAO.carregar(codigo);
 	}
 
-	public void salvar(Pessoa pessoa) throws RNException {
-		Integer id = pessoa.getId();
+	public Pessoa salvar(Pessoa pessoa) throws RNException {
 		Pessoa pessoaMerge = null;
 		
 		try {
@@ -34,18 +33,13 @@ public class PessoaRN {
 				pessoa.setCpf(null);
 				pessoa.setIdentidade(null);
 			}
-			
-			if(id == null || id== 0){
-				pessoaDAO.salvar(pessoa);
-			}
-			else{
-				pessoaDAO.atualizar(pessoa);
-			}
-			
+				pessoaMerge = pessoaDAO.salvar(pessoa);
+	
 		} catch (DAOException e) {
 			throw (new RNException(e.getMessage()));
 			
 		}
+		return pessoaMerge;
 
 	}
 
@@ -67,7 +61,5 @@ public class PessoaRN {
 		return null;
 	}
 
-	public List<Contato> listarSetores() {
-		return this.pessoaDAO.listarSetores();
-	}
+
 }

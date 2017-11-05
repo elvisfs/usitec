@@ -13,7 +13,6 @@ import org.hibernate.Session;
 import sicaf.contato.Contato;
 import sicaf.pessoaSetor.PessoaSetor;
 import sicaf.pessoaSetor.PessoaSetorDAO;
-import sicaf.setor.Setor;
 import sicaf.util.DAOException;
 import sicaf.util.DAOFactory;
 import sicaf.util.HibernateUtil;
@@ -26,16 +25,14 @@ public class PessoaDAO {
 	}
 
 	
-	public void salvar(Pessoa pessoa) throws DAOException {
-		Setor set;
+	public Pessoa salvar(Pessoa pessoa) throws DAOException {
+		Pessoa merge = null;
 		try {
 			this.session = HibernateUtil.getSessionFactory().openSession();
-			for(PessoaSetor p:pessoa.getSetores()){
-				set = this.session.find(Setor.class, p.getSetor().getIdSetor());
-				 p.setSetor(set);
-			}
 			this.session.beginTransaction();
-			this.session.persist(pessoa);
+			merge = (Pessoa) this.session.merge(pessoa);
+			this.session.flush();
+			this.session.clear();
 			this.session.getTransaction().commit();
 		} catch (javax.persistence.PersistenceException e) {
 			if (this.session.getTransaction().isActive())
@@ -44,6 +41,7 @@ public class PessoaDAO {
 		} finally {
 			this.session.close();
 		}
+		return merge;
 	}
 	
 	public void atualizar(Pessoa pessoa) throws DAOException{
@@ -136,14 +134,4 @@ public class PessoaDAO {
 		return pessoas;
 	}
 
-	public List<Contato> listarSetores() {
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-
-		CriteriaQuery<Contato> criteria = builder.createQuery(Contato.class);
-		criteria.from(Pessoa.class);
-		List<Contato> pessoas = session.createQuery(criteria).getResultList();
-
-		return pessoas;
-
-	}
 }
