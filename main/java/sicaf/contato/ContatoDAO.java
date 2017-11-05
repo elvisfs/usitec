@@ -2,9 +2,15 @@ package sicaf.contato;
 
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
+import sicaf.pessoa.Pessoa;
+import sicaf.pessoaSetor.PessoaSetor;
 import sicaf.util.DAOException;
 import sicaf.util.HibernateUtil;
 
@@ -15,11 +21,30 @@ public class ContatoDAO {
 		this.session = session;
 	}
 
-	public void salvar(Contato contato) throws DAOException {
+	public Contato salvar(Contato contato) throws DAOException {
+		Contato merge=null;
 		try {
 			this.session = HibernateUtil.getSessionFactory().openSession();
 			this.session.beginTransaction();
-			this.session.saveOrUpdate(contato);
+			this.session.merge(contato);
+			this.session.flush();
+			this.session.clear();
+			this.session.getTransaction().commit();
+		} catch (javax.persistence.PersistenceException e) {
+			throw new DAOException(e.getMessage());
+		} finally {
+			if (this.session.getTransaction().isActive())
+				this.session.getTransaction().rollback();
+			this.session.close();
+		}
+		return merge;
+	}
+
+	public void atualizar(Contato contato) throws DAOException {
+		try {
+			this.session = HibernateUtil.getSessionFactory().openSession();
+			this.session.beginTransaction();
+			this.session.update(contato);
 			this.session.getTransaction().commit();
 		} catch (javax.persistence.PersistenceException e) {
 			throw new DAOException(e.getMessage());
@@ -31,15 +56,14 @@ public class ContatoDAO {
 
 	}
 
-	public void atualizar(Contato contato) throws DAOException {
-		// TODO Auto-generated method stub
-
-	}
-
 	public void excluir(Contato contato) throws DAOException {
 		try {
 			this.session = HibernateUtil.getSessionFactory().openSession();
 			this.session.beginTransaction();
+			for(PessoaSetor p:contato.getSetores()){
+				p.setContato(null);
+				this.session.update(p);
+			}
 			this.session.delete(contato);
 			this.session.getTransaction().commit();
 		} catch (javax.persistence.EntityNotFoundException e) {
@@ -74,20 +98,23 @@ public class ContatoDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Contato> listarPorIdPessoa(Integer idPessoa) throws DAOException {
+	public List<Contato> listarPorPessoa(Pessoa pessoa) throws DAOException {
 		List<Contato> contatos = null;
+		this.session = HibernateUtil.getSessionFactory().openSession();
+		
 		try {
-			this.session = HibernateUtil.getSessionFactory().openSession();
-			String hql = "select c from Contato c where c.pessoa.id = ?";
-			Query<?> consulta = this.session.createQuery(hql);
-			consulta.setParameter(0, idPessoa);
-			contatos = (List<Contato>) consulta.getResultList();
-		} catch (Exception e) {
-			// TODO: handle exception
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<Contato> query = builder.createQuery(Contato.class);
+			Root<Contato> root = query.from(Contato.class);			
+			query.distinct(true).where(builder.equal(root.get("pessoa"), pessoa)); 
+			contatos = session.createQuery(query.orderBy(builder.asc(root.get("nome")))).getResultList();
+	 
+		} catch (javax.persistence.PersistenceException e) {
+			throw (new DAOException(e.getMessage()));
 		} finally {
 			this.session.close();
 		}
-
+		
 		return contatos;
 	}
 }

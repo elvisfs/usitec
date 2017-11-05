@@ -2,6 +2,7 @@ package sicaf.contato;
 
 import java.util.List;
 
+import sicaf.pessoa.Pessoa;
 import sicaf.util.DAOException;
 import sicaf.util.DAOFactory;
 import sicaf.util.RNException;
@@ -12,24 +13,29 @@ public class ContatoRN {
 	public ContatoRN() {
 		this.contatoDAO = DAOFactory.criarContatoDAO();
 	}
-	
+
 	public Contato carregar(Integer codigo) {
 		return this.contatoDAO.carregar(codigo);
 	}
-	
-	public void salvar(Contato contato) throws RNException {
+
+	public Contato salvar(Contato contato) throws RNException {
 		try {
-			contatoDAO.salvar(contato);
+			Contato merge = null;
+			if(contato.getId()==null)
+				merge = contatoDAO.salvar(contato);
+			else
+				contatoDAO.atualizar(contato);
+			return merge;
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new RNException(e.getMessage());
 		}
 	}
-	
-	public List<Contato> listarPorIdPessoa(Integer idPessoa) {
+
+	public List<Contato> listarPorPessoa(Pessoa pessoa) {
 		try {
-			return this.contatoDAO.listarPorIdPessoa(idPessoa);
+			return this.contatoDAO.listarPorPessoa(pessoa);
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,6 +49,6 @@ public class ContatoRN {
 		} catch (DAOException e) {
 			throw new RNException(e.getMessage());
 		}
-		
+
 	}
 }

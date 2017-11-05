@@ -2,24 +2,21 @@ package sicaf.contato;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
 import sicaf.pessoa.Pessoa;
-import sicaf.setor.Setor;
+import sicaf.pessoaSetor.PessoaSetor;
 
 @Entity
-//@IdClass(PessoaSetorId.class)
 public class Contato implements Serializable {
 		
 	/**
@@ -31,35 +28,24 @@ public class Contato implements Serializable {
 	@SequenceGenerator(name="contatoGenerator",sequenceName="CONTATO_SEQ",allocationSize=10)
 	@GeneratedValue(generator="contatoGenerator")
 	@Id
-	private Integer idContato;	
+	private Integer id;	
 	private String nome;
 	private String telefone;
 	private String email;
-	@ManyToOne
-	private Pessoa pessoa;
-	@ManyToMany
-	@JoinTable(name="contato_setor", joinColumns={@JoinColumn(name="idContato")},inverseJoinColumns={@JoinColumn(name="idSetor")})
-	private List<Setor> setores = new ArrayList<Setor>();
+	
 
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="contato",cascade = CascadeType.MERGE)
+	private List<PessoaSetor> setores = new ArrayList<PessoaSetor>();
 	
-	public List<Setor> getSetores() {
-		return setores;
-	}
-	public void setSetores(List<Setor> setores) {
-		this.setores = setores;
-	}
-	public Pessoa getPessoa() {
-		return pessoa;
-	}
-	public void setPessoa(Pessoa pessoa) {
-		this.pessoa = pessoa;
-	}
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Pessoa pessoa;
 	
-	public Integer getIdContato() {
-		return idContato;
+	
+	public Integer getId() {
+		return id;
 	}
-	public void setIdContato(Integer idContato) {
-		this.idContato = idContato;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	public String getTelefone() {
 		return telefone;
@@ -79,6 +65,18 @@ public class Contato implements Serializable {
 	}
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+	public List<PessoaSetor> getSetores() {
+		return setores;
+	}
+	public void setSetores(List<PessoaSetor> setores) {
+		this.setores = setores;
+	}
+	public Pessoa getPessoa() {
+		return pessoa;
+	}
+	public void setPessoa(Pessoa pessoa) {
+		this.pessoa = pessoa;
 	}
 
 }
