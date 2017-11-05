@@ -121,7 +121,6 @@ public class UsuarioBean {
 		} catch (RNException e) {
 			context.addMessage(null, (new FacesMessage(e.getMessage())));
 		}
-	//	this.usuario = new Usuario();
 	}
 
 	public String excluir() {
