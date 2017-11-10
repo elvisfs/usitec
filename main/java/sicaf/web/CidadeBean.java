@@ -42,6 +42,7 @@ public class CidadeBean {
 	}
 	
 	public String novo(){
+		this.cidade = new Cidade();
 		return "/restrito/cidade";
 	}
 	

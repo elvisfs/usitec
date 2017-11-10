@@ -1,6 +1,5 @@
 package sicaf.web;
 
-import java.io.Serializable;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -14,7 +13,7 @@ import sicaf.util.RNException;
 
 @ManagedBean(name = "setorBean")
 @RequestScoped
-public class SetorBean implements Serializable {
+public class SetorBean {
 	
 	private Setor setor = new Setor();
 	private List<Setor> lista;
