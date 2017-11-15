@@ -1,6 +1,8 @@
 package sicaf.util;
 
+import sicaf.ativoFixo.AtivoFixoDAO;
 import sicaf.categoria.CategoriaDAO;
+import sicaf.centroCusto.CentroCustoDAO;
 import sicaf.cidade.CidadeDAO;
 import sicaf.contato.ContatoDAO;
 import sicaf.perfil.PerfilDAO;
@@ -48,7 +50,16 @@ public class DAOFactory {
 	public static CidadeDAO criarCidadeDAO(){
 		CidadeDAO cidadeDAO = new CidadeDAO();
 		cidadeDAO.setSession(HibernateUtil.getSessionFactory().getCurrentSession());
-		return cidadeDAO;
-		
+		return cidadeDAO;	
+	}
+	public static CentroCustoDAO criarCentroCustoDAO(){
+		CentroCustoDAO centroCustoDAO = new CentroCustoDAO();
+		centroCustoDAO.setSession(HibernateUtil.getSessionFactory().getCurrentSession());
+		return centroCustoDAO;
+	}
+	public static AtivoFixoDAO criarAtivoFixoDAO() {
+		AtivoFixoDAO ativoFixoDAO = new AtivoFixoDAO();
+		ativoFixoDAO.setSession(HibernateUtil.getSessionFactory().getCurrentSession());
+		return ativoFixoDAO;
 	}
 }

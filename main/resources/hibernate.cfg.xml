@@ -28,5 +28,7 @@
 		<mapping class="sicaf.contato.Contato"/>
 		<mapping class="sicaf.perfil.Perfil"/>
 		<mapping class="sicaf.cidade.Cidade"/>
+		<mapping class="sicaf.centroCusto.CentroCusto"/>
+		<mapping class="sicaf.ativoFixo.AtivoFixo"/>
 	</session-factory>
 </hibernate-configuration>
