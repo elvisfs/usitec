@@ -13,7 +13,7 @@ import javax.persistence.Transient;
 
 import sicaf.centroCusto.CentroCusto;
 
-
+//teste
 @Entity
 public class AtivoFixo implements Serializable{
 
