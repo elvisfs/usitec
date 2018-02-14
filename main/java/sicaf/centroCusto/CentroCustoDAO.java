@@ -59,7 +59,8 @@ public class CentroCustoDAO {
 		} catch (javax.persistence.PersistenceException e) {
 			if (this.session.getTransaction().isActive())
 				this.session.getTransaction().rollback();
-			throw (new DAOException(e.getMessage()));
+			if(e.getCause() instanceof org.hibernate.exception.ConstraintViolationException)
+				throw (new DAOException("Erro ao excluir o centro de custo. Verifique se ele está associado a algum um ativo fixo"));
 		} finally {
 			this.session.close();
 		}

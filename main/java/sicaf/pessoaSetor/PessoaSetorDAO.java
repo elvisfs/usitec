@@ -136,8 +136,6 @@ public class PessoaSetorDAO {
 			CriteriaQuery<PessoaSetor> query = builder.createQuery(PessoaSetor.class);
 			Root<PessoaSetor> root = query.from(PessoaSetor.class);			
 			Predicate pess =builder.equal(root.get("pessoa"), pessoa);
-			Predicate nulo = builder.isNull(root.get("setor"));
-			Predicate teste = builder.and(pess, nulo);
 			query.where(builder.isNull(root.get("contato")),pess); 
 			setores = session.createQuery(query).getResultList();
 		} catch (javax.persistence.PersistenceException e) {

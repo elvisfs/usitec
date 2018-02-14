@@ -44,8 +44,11 @@ public class SetorDAO {
 			this.session.beginTransaction();
 			this.session.delete(setor);
 			this.session.getTransaction().commit();
-		}catch(javax.persistence.EntityNotFoundException e){
-			throw new DAOException("Setor não cadastrado");
+		}catch (javax.persistence.PersistenceException e) {
+			if (this.session.getTransaction().isActive())
+				this.session.getTransaction().rollback();
+			if(e.getCause() instanceof org.hibernate.exception.ConstraintViolationException)
+				throw (new DAOException("Erro ao excluir o setor. Verifique se ele está associada a algum registro de Cliente/Fornecedor"));
 		} finally{
 			if(this.session.getTransaction().isActive())
 				this.session.getTransaction().rollback();

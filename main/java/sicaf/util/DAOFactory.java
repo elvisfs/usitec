@@ -5,6 +5,7 @@ import sicaf.categoria.CategoriaDAO;
 import sicaf.centroCusto.CentroCustoDAO;
 import sicaf.cidade.CidadeDAO;
 import sicaf.contato.ContatoDAO;
+import sicaf.lancamento.LancamentoDAO;
 import sicaf.perfil.PerfilDAO;
 import sicaf.pessoa.PessoaDAO;
 import sicaf.pessoaSetor.PessoaSetorDAO;
@@ -61,5 +62,10 @@ public class DAOFactory {
 		AtivoFixoDAO ativoFixoDAO = new AtivoFixoDAO();
 		ativoFixoDAO.setSession(HibernateUtil.getSessionFactory().getCurrentSession());
 		return ativoFixoDAO;
+	}
+	public static LancamentoDAO criarLancamentoDAO(){
+		LancamentoDAO lancamentoDAO = new LancamentoDAO();
+		lancamentoDAO.setSession(HibernateUtil.getSessionFactory().getCurrentSession());
+		return lancamentoDAO;
 	}
 }

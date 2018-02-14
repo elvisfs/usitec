@@ -225,4 +225,137 @@ public class Pessoa implements Serializable{
 		this.contatos = contatos;
 	}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((bairro == null) ? 0 : bairro.hashCode());
+		result = prime * result + ((cep == null) ? 0 : cep.hashCode());
+		result = prime * result + ((cidade == null) ? 0 : cidade.hashCode());
+		result = prime * result + (cliente ? 1231 : 1237);
+		result = prime * result + ((cnpj == null) ? 0 : cnpj.hashCode());
+		result = prime * result + ((contatos == null) ? 0 : contatos.hashCode());
+		result = prime * result + ((cpf == null) ? 0 : cpf.hashCode());
+		result = prime * result + ((endereco == null) ? 0 : endereco.hashCode());
+		result = prime * result + (fornecedor ? 1231 : 1237);
+		result = prime * result + (funcionario ? 1231 : 1237);
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((identidade == null) ? 0 : identidade.hashCode());
+		result = prime * result + ((inscricaoEstadual == null) ? 0 : inscricaoEstadual.hashCode());
+		result = prime * result + ((isPessoaFisica == null) ? 0 : isPessoaFisica.hashCode());
+		result = prime * result + ((isPessoaJuridica == null) ? 0 : isPessoaJuridica.hashCode());
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		result = prime * result + ((setores == null) ? 0 : setores.hashCode());
+		result = prime * result + ((site == null) ? 0 : site.hashCode());
+		result = prime * result + ((telefone == null) ? 0 : telefone.hashCode());
+		result = prime * result + ((tipo == null) ? 0 : tipo.hashCode());
+		result = prime * result + ((tipoContato == null) ? 0 : tipoContato.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Pessoa other = (Pessoa) obj;
+		if (bairro == null) {
+			if (other.bairro != null)
+				return false;
+		} else if (!bairro.equals(other.bairro))
+			return false;
+		if (cep == null) {
+			if (other.cep != null)
+				return false;
+		} else if (!cep.equals(other.cep))
+			return false;
+		if (cidade == null) {
+			if (other.cidade != null)
+				return false;
+		} else if (!cidade.equals(other.cidade))
+			return false;
+		if (cliente != other.cliente)
+			return false;
+		if (cnpj == null) {
+			if (other.cnpj != null)
+				return false;
+		} else if (!cnpj.equals(other.cnpj))
+			return false;
+		if (contatos == null) {
+			if (other.contatos != null)
+				return false;
+		} else if (!contatos.equals(other.contatos))
+			return false;
+		if (cpf == null) {
+			if (other.cpf != null)
+				return false;
+		} else if (!cpf.equals(other.cpf))
+			return false;
+		if (endereco == null) {
+			if (other.endereco != null)
+				return false;
+		} else if (!endereco.equals(other.endereco))
+			return false;
+		if (fornecedor != other.fornecedor)
+			return false;
+		if (funcionario != other.funcionario)
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (identidade == null) {
+			if (other.identidade != null)
+				return false;
+		} else if (!identidade.equals(other.identidade))
+			return false;
+		if (inscricaoEstadual == null) {
+			if (other.inscricaoEstadual != null)
+				return false;
+		} else if (!inscricaoEstadual.equals(other.inscricaoEstadual))
+			return false;
+		if (isPessoaFisica == null) {
+			if (other.isPessoaFisica != null)
+				return false;
+		} else if (!isPessoaFisica.equals(other.isPessoaFisica))
+			return false;
+		if (isPessoaJuridica == null) {
+			if (other.isPessoaJuridica != null)
+				return false;
+		} else if (!isPessoaJuridica.equals(other.isPessoaJuridica))
+			return false;
+		if (nome == null) {
+			if (other.nome != null)
+				return false;
+		} else if (!nome.equals(other.nome))
+			return false;
+		if (setores == null) {
+			if (other.setores != null)
+				return false;
+		} else if (!setores.equals(other.setores))
+			return false;
+		if (site == null) {
+			if (other.site != null)
+				return false;
+		} else if (!site.equals(other.site))
+			return false;
+		if (telefone == null) {
+			if (other.telefone != null)
+				return false;
+		} else if (!telefone.equals(other.telefone))
+			return false;
+		if (tipo != other.tipo)
+			return false;
+		if (tipoContato == null) {
+			if (other.tipoContato != null)
+				return false;
+		} else if (!tipoContato.equals(other.tipoContato))
+			return false;
+		return true;
+	}
+	
 }

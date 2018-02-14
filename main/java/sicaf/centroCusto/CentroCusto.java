@@ -24,6 +24,7 @@ public class CentroCusto implements Serializable {
 	@GeneratedValue(generator = "centroCustoGenerator")
 	@Id
 	private Integer id;
+	private String codigo;
 	private String descricao;
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "centroCusto", cascade = CascadeType.MERGE)
 	private List<AtivoFixo> ativosFixo = new ArrayList<AtivoFixo>();
@@ -85,5 +86,13 @@ public class CentroCusto implements Serializable {
 			if(other.id != null) return false;
 		}else if(!id.equals(other.id)) return false;
 		return true;
+	}
+
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 }

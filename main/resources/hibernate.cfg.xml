@@ -30,5 +30,6 @@
 		<mapping class="sicaf.cidade.Cidade"/>
 		<mapping class="sicaf.centroCusto.CentroCusto"/>
 		<mapping class="sicaf.ativoFixo.AtivoFixo"/>
+		<mapping class="sicaf.lancamento.Lancamento"/>
 	</session-factory>
 </hibernate-configuration>

@@ -44,12 +44,12 @@ public class CentroCustoBean {
 	}
 	
 	public void excluir(){
+		FacesContext context = FacesContext.getCurrentInstance();
 		CentroCustoRN centroCustoRN = new CentroCustoRN();
 		try {
 			centroCustoRN.excluir(this.centroCusto);
 		} catch (RNException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			context.addMessage(null, (new FacesMessage(e.getMessage())));
 		}
 	}
 	

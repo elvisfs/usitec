@@ -8,8 +8,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -38,7 +36,6 @@ public class Perfil implements GrantedAuthority {
 	private String descricao;
 
 	@ManyToMany(fetch = FetchType.EAGER,  mappedBy="perfis")
-	//@JoinTable(name = "usuario_perfil", joinColumns = @JoinColumn(name = "idPerfil"), inverseJoinColumns = @JoinColumn(name = "idUsuario"))
 	
 	private List<Usuario> usuarios = new ArrayList<Usuario>();
 
@@ -71,5 +68,42 @@ public class Perfil implements GrantedAuthority {
 		
 	}
 
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
+		result = prime * result + ((idPerfil == null) ? 0 : idPerfil.hashCode());
+		result = prime * result + ((usuarios == null) ? 0 : usuarios.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Perfil other = (Perfil) obj;
+		if (descricao == null) {
+			if (other.descricao != null)
+				return false;
+		} else if (!descricao.equals(other.descricao))
+			return false;
+		if (idPerfil == null) {
+			if (other.idPerfil != null)
+				return false;
+		} else if (!idPerfil.equals(other.idPerfil))
+			return false;
+		if (usuarios == null) {
+			if (other.usuarios != null)
+				return false;
+		} else if (!usuarios.equals(other.usuarios))
+			return false;
+		return true;
+	}
 }
 

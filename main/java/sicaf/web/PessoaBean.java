@@ -40,12 +40,9 @@ public class PessoaBean implements Serializable {
 	private String idPessoa;
 	private List<Setor> setoresSelecionados;
 	private List<PessoaSetor> setores = new ArrayList<PessoaSetor>();
-
 	private PessoaSetor pessoaSetor;
-
-
 	private ArrayList<Setor> listaSetores;
-
+	
 	@PostConstruct
 	public void init() {
 		tipos = Arrays.asList(TipoPessoa.values());

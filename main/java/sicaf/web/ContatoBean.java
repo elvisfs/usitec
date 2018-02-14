@@ -85,6 +85,7 @@ public class ContatoBean implements Serializable {
 	}
 
 	public String novo() {
+		this.contato = new Contato();
 		 return "contato?faces-redirect=true&includeViewParams=true&pessoa="+pessoa;
 	}
 

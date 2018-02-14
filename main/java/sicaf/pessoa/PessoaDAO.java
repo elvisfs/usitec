@@ -10,7 +10,6 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 
-import sicaf.contato.Contato;
 import sicaf.pessoaSetor.PessoaSetor;
 import sicaf.pessoaSetor.PessoaSetorDAO;
 import sicaf.util.DAOException;
@@ -119,8 +118,6 @@ public class PessoaDAO {
 			Predicate predicate = builder.and();
 			CriteriaQuery<Pessoa> query = builder.createQuery(Pessoa.class);
 			Root<Pessoa> root = query.from(Pessoa.class);
-		//	Path<String> nomePath = root.get("nome");
-		//	query.multiselect(nomePath);
 			if (tipoContato != null){
 				predicate = builder.equal(root.<String>get(tipoContato), true);
 			}

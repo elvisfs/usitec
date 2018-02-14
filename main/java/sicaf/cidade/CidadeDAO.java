@@ -59,7 +59,8 @@ public class CidadeDAO {
 		} catch (javax.persistence.PersistenceException e) {
 			if (this.session.getTransaction().isActive())
 				this.session.getTransaction().rollback();
-			throw (new DAOException(e.getMessage()));
+			if(e.getCause() instanceof org.hibernate.exception.ConstraintViolationException)
+				throw (new DAOException("Erro ao excluir a cidade. Verifique se ela está associada a algum registro de Cliente/Fornecedor"));
 		} finally {
 			this.session.close();
 		}
